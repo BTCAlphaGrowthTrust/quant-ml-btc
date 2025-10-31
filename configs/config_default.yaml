@@ -1,0 +1,41 @@
+labeling:
+  mode: trade_based
+  forward_window_bars: 40
+  return_threshold: 0.02
+  stop_loss_pct: -0.01
+  rr_multiple: 2.0
+  direction: long_only
+  neutral_class: false
+
+models:
+  - logistic_regression
+  - xgboost
+
+metrics:
+  - sharpe_ratio
+  - profit_factor
+  - max_drawdown_pct
+  - accuracy
+  - roc_auc
+  - exposure_pct
+  - sortino_ratio
+  - brier_score
+
+output:
+  results_dir: results/
+  files:
+    - metrics.csv
+    - equity_curve.csv
+    - params.json
+    - trades.csv
+    - feature_importance.csv
+  charts:
+    - equity.png
+    - rolling_sharpe.png
+    - feature_importance.png
+  metadata:
+    include:
+      - run_id
+      - git_commit
+      - random_seed
+      - date_range
