@@ -1,61 +1,123 @@
-from pathlib import Path
-import pandas as pd, numpy as np
-from .utils.io import load_yaml, read_csv, save_parquet, save_csv, save_json
-# --- tiny indicator helpers
-def ema(x, n): return x.ewm(span=n, adjust=False).mean()
-def stoch(df, k=14, d=3, smooth_k=6):
-    hh=df["high"].rolling(k,min_periods=1).max(); ll=df["low"].rolling(k,min_periods=1).min()
-    raw=100*(df["close"]-ll).replace(0,np.nan)/(hh-ll).replace(0,np.nan); raw=raw.fillna(50)
-    kline=raw.rolling(smooth_k,min_periods=1).mean(); dline=kline.rolling(d,min_periods=1).mean()
-    return kline.rename("stoch_k"), dline.rename("stoch_d")
-def build_features(df, feats):
-    out=df.copy()
-    for spec in feats["indicators"]:
-        if spec["kind"]=="ema": out[f'ema_{spec["length"]}']=ema(out["close"], spec["length"])
-        if spec["kind"]=="stoch":
-            k,d=stoch(out, spec["k"], spec["d"], spec["smooth_k"])
-            out[f'stochK_{spec.get("tf","base")}']=k; out[f'stochD_{spec.get("tf","base")}']=d
+"""
+pipeline.py
+Quant-ML-BTC v3 — config-driven pipeline
+Loads BTC data → adds EMA/Stoch → enriches features → labels → trains XGB → backtests → reports metrics
+"""
+
+import pandas as pd
+import numpy as np
+from xgboost import XGBClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+from .data_loader import get_btc_data
+from .metrics_reporter import export_metrics
+from .feature_engineer import add_features
+
+
+# === Indicator Functions ===
+def ema(series, n):
+    """Exponential Moving Average."""
+    return series.ewm(span=n, adjust=False).mean()
+
+
+def stoch(df, k=14, d=6, smooth_k=3):
+    """Stochastic oscillator."""
+    hh = df["high"].rolling(k).max()
+    ll = df["low"].rolling(k).min()
+    raw_k = 100 * (df["close"] - ll) / (hh - ll)
+    k_smooth = raw_k.rolling(smooth_k).mean()
+    d_line = k_smooth.rolling(d).mean()
+    return k_smooth.fillna(50), d_line.fillna(50)
+
+
+# === Labeling ===
+def label_return(df, horizon=12, thr=0.01):
+    """Generate -1 / 0 / 1 labels based on forward returns."""
+    fwd = df["close"].shift(-horizon)
+    ret = (fwd / df["close"]) - 1
+    return np.where(ret > thr, 1, np.where(ret < -thr, -1, 0))
+
+
+# === Label Encoder for XGB ===
+def _encode_labels(y_series):
+    """Remap labels from -1,0,1 → 0,1,2 for XGB compatibility."""
+    mapping = {-1: 0, 0: 1, 1: 2}
+    return y_series.map(mapping)
+
+
+# === Main Pipeline ===
+def run_pipeline(config: dict, run_dir: str = "results"):
+    """Execute full Quant-ML-BTC pipeline."""
+    # 1️⃣ Load Config Parameters
+    ema_fast, ema_slow = config["features"]["ema_periods"]
+    k, d, smooth_k = config["features"]["stochastic"]
+    horizon = config["label"]["horizon"]
+    thr = config["label"]["threshold"]
+    init_cap = config["backtest"]["initial_capital"]
+    model_params = config["model"]
+
+    # 2️⃣ Load Data
+    df = get_btc_data()
+    df["ema_fast"] = ema(df["close"], ema_fast)
+    df["ema_slow"] = ema(df["close"], ema_slow)
+    k_line, d_line = stoch(df, k, d, smooth_k)
+    df["stoch_k"], df["stoch_d"] = k_line, d_line
+
+    # 2.5️⃣ Add engineered features (RSI, volatility, etc.)
+    df = add_features(df)
+
+    df = df.dropna().reset_index(drop=True)
+
+    # 3️⃣ Label Data
+    df["y"] = label_by_volatility(df, horizon=horizon, vol_window=20, vol_factor=0.5)
+    features = [
+        "ema_fast", "ema_slow", "stoch_k", "stoch_d",
+        "rsi_14", "volatility_20", "ema_cross_state", "return_1"
+    ]
+    X, y = df[features], df["y"]
+
+    # 4️⃣ Train/Test Split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, shuffle=False)
+    y_train_enc = _encode_labels(y_train)
+    y_test_enc = _encode_labels(y_test)
+
+    # 5️⃣ Train Model
+    model = XGBClassifier(
+        n_estimators=model_params["n_estimators"],
+        max_depth=model_params["max_depth"],
+        learning_rate=model_params["learning_rate"],
+        subsample=0.8,
+        colsample_bytree=0.8,
+        random_state=42,
+    )
+    model.fit(X_train, y_train_enc)
+
+    # 6️⃣ Predict + Evaluate
+    preds_enc = model.predict(X_test)
+    inv_map = {0: -1, 1: 0, 2: 1}
+    preds = pd.Series(preds_enc).map(inv_map)
+    acc = accuracy_score(y_test_enc, preds_enc)
+    print(f"Model accuracy: {acc:.3f}")
+
+    # 7️⃣ Backtest
+    signal = pd.Series(preds, index=X_test.index)
+    ret = df.loc[X_test.index, "close"].pct_change().fillna(0)
+    pnl = signal.shift(1).fillna(0) * ret
+    equity = (1 + pnl).cumprod() * init_cap
+    out = pd.DataFrame({"equity": equity})
+    out.to_csv(f"{run_dir}/equity_curve.csv", index=False)
+    print(f"✅ Saved equity_curve.csv with {len(out)} rows")
+
+    # 8️⃣ Save Full Dataset
+    df_out = df.loc[X_test.index].copy()
+    df_out["pred_class"] = preds
+    df_out.to_csv(f"{run_dir}/backtest_dataset.csv", index=False)
+    print(f"✅ Saved full dataset with features and predictions: {len(df_out)} rows")
+
+    # 9️⃣ Export Metrics
+    export_metrics(out["equity"], path=f"{run_dir}/metrics.csv")
+
     return out
-def label_return_fwd(df, horizon=12, thr=0.01):
-    fwd=df["close"].shift(-horizon)
-    ret=(fwd/df["close"]-1.0)
-    y=np.where(ret>=thr,1,np.where(ret<=-thr,-1,0))
-    df2=df.copy(); df2["y"]=y; return df2.dropna().copy()
-def train_xgb(X,y,params):
-    from xgboost import XGBClassifier
-    m=XGBClassifier(**params); m.fit(X,y); return m
-def train_logreg(X,y,params):
-    from sklearn.linear_model import LogisticRegression
-    m=LogisticRegression(**params); m.fit(X,y); return m
-def walk_fit_predict(df, splits, model_type, params):
-    tr=df.loc[df.index>=splits["train_start"]]; tr=tr.loc[tr.index<splits["valid_start"]]
-    va=df.loc[df.index>=splits["valid_start"]]; va=va.loc[va.index<splits["test_start"]]
-    te=df.loc[df.index>=splits["test_start"]]
-    features=[c for c in df.columns if c not in ["open","high","low","close","volume","y"]]
-    Xtr,ytr=tr[features],tr["y"]; Xte, yte=te[features], te["y"]
-    model=train_xgb(Xtr,ytr,params) if model_type=="xgboost" else train_logreg(Xtr,ytr,params)
-    proba=pd.Series(model.predict_proba(Xte)[:,1], index=te.index, name="p_up")
-    signal=(proba>0.55).astype(int)-(proba<0.45).astype(int)  # +1,0,-1
-    return signal
-def backtest(close, signal, cash0=100000, fee=0.0005, slip=0.0):
-    pos=signal.shift(1).fillna(0)  # enter next bar
-    ret=close.pct_change().fillna(0)
-    strat=pos*ret - abs(pos.diff().fillna(0))*fee - abs(pos.diff().fillna(0))*slip
-    eq=(1+strat).cumprod()*cash0
-    return pd.DataFrame({"equity":eq, "ret":strat})
-def run(config_path):
-    cfg=load_yaml(config_path)
-    base=read_csv(cfg["data"]["csv_path"], parse_dates=[cfg["data"]["ts_col"]]).rename(columns={cfg["data"]["ts_col"]:"timestamp"})
-    base=base[cfg["data"]["price_cols"]+["timestamp"]].set_index("timestamp").sort_index()
-    feats=load_yaml("configs/features.yaml")[cfg["features"]["feature_set"]]
-    df=build_features(base, feats).dropna()
-    df=label_return_fwd(df, cfg["labels"]["return_horizon_bars"], cfg["labels"]["threshold"])
-    # split + model
-    params=load_yaml("configs/model_params.yaml")[cfg["model"]["params_name"]]
-    signal=walk_fit_predict(df, cfg["split"], cfg["model"]["type"], params)
-    bt=backtest(df.loc[signal.index,"close"], signal, cfg["backtest"]["initial_cash"], cfg["backtest"]["fee_bps"]/1e4, cfg["backtest"]["slippage_bps"]/1e4)
-    # saves
-    save_parquet(df, cfg["output"]["processed_parquet"])
-    save_csv(bt.reset_index().rename(columns={"index":"timestamp"}), f'{cfg["output"]["results_dir"]}/equity_curve.csv')
-    save_json({"config":cfg,"features":list(df.columns)}, f'{cfg["output"]["results_dir"]}/params.json')
-    return bt
+
+from .labeler import label_by_volatility

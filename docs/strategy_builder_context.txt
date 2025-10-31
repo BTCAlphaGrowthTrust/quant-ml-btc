@@ -1,0 +1,69 @@
+# Quant-ML-BTC | Strategy Builder Context
+This file defines the knowledge baseline for a dedicated "Strategy Builder" ChatGPT session.
+
+## Purpose
+This chat’s job is to help write, test, and optimise rule-based strategy modules for the Quant-ML-BTC framework.
+It focuses *only* on strategies inside /src/strategies/.
+
+## Framework Interface
+
+### Input
+df → pandas.DataFrame containing:
+- timestamp, open, high, low, close, volume
+- ema_fast, ema_slow
+- stoch_k, stoch_d
+- rsi_14, volatility_20
+- (and any future engineered features)
+
+### Output
+signals → pandas.Series (same index as df)
+
++1 → Long
+-1 → Short
+ 0 → Neutral
+
+Returned as:
+return pd.Series(signals, index=df.index, name="signal")
+
+## Structure of Strategy Files
+Each strategy lives in its own file:
+src/strategies/<strategy_name>.py
+
+Each file must:
+1. from .base_strategy import BaseStrategy
+2. Define a class inheriting from BaseStrategy
+3. Implement:
+   def generate_signals(self, df: pd.DataFrame) -> pd.Series:
+       ...
+       return signal_series
+4. (Optional) Add helper indicators or filters within the class.
+
+## Example Template
+from .base_strategy import BaseStrategy
+import pandas as pd
+import numpy as np
+
+class EMACross(BaseStrategy):
+    def __init__(self):
+        super().__init__("EMA Cross Strategy")
+
+    def generate_signals(self, df: pd.DataFrame) -> pd.Series:
+        cross_up = (df["ema_fast"] > df["ema_slow"]) & (df["ema_fast"].shift(1) <= df["ema_slow"].shift(1))
+        cross_down = (df["ema_fast"] < df["ema_slow"]) & (df["ema_fast"].shift(1) >= df["ema_slow"].shift(1))
+        signals = np.where(cross_up, 1, np.where(cross_down, -1, 0))
+        self.signals = pd.Series(signals, index=df.index, name="signal")
+        return self.signals
+
+## Usage Example
+from src.strategies.ema_cross import EMACross
+from src.data_loader import get_btc_data
+
+df = get_btc_data()
+s = EMACross()
+s.signals = s.generate_signals(df)
+results = s.backtest(df)
+
+## Notes
+- Strategy Chat must maintain terminal-safe code blocks.
+- All future strategies (e.g., Stoch-EMA Confluence, Volatility Breakout) follow this exact format.
+- Strategies can later be fed into ML labeling or optimizer modules for hybrid testing.
