@@ -1,41 +1,30 @@
-labeling:
-  mode: trade_based
-  forward_window_bars: 40
-  return_threshold: 0.02
-  stop_loss_pct: -0.01
-  rr_multiple: 2.0
-  direction: long_only
-  neutral_class: false
-
-models:
-  - logistic_regression
-  - xgboost
-
-metrics:
-  - sharpe_ratio
-  - profit_factor
-  - max_drawdown_pct
-  - accuracy
-  - roc_auc
-  - exposure_pct
-  - sortino_ratio
-  - brier_score
-
+run_name: btcusdt_4h_base
+data:
+  symbol: BTCUSDT
+  tf_base: 4h
+  csv_path: data/raw/BTCUSDT_4h.csv
+  ts_col: timestamp
+  price_cols: [open, high, low, close, volume]
+features:
+  feature_set: base_stoch_ema   # from features.yaml
+  mtf: ["4h","1D","1W"]         # will align to base tf
+labels:
+  mode: "return_fwd"            # or "pivot"
+  return_horizon_bars: 12       # 12 * 4h = 2 days
+  threshold: 0.01               # +1 if >= +1%, -1 if <= -1%, else 0
+split:
+  train_start: "2018-01-01"
+  valid_start: "2022-01-01"
+  test_start:  "2024-01-01"
+  end:         "2100-01-01"
+model:
+  type: "xgboost"               # "logreg" or "xgboost"
+  params_name: "xgb_light"      # from model_params.yaml
+backtest:
+  initial_cash: 100000
+  fee_bps: 5
+  slippage_bps: 0
+  position_sizing: "unit"       # 1x notional per signal
 output:
-  results_dir: results/
-  files:
-    - metrics.csv
-    - equity_curve.csv
-    - params.json
-    - trades.csv
-    - feature_importance.csv
-  charts:
-    - equity.png
-    - rolling_sharpe.png
-    - feature_importance.png
-  metadata:
-    include:
-      - run_id
-      - git_commit
-      - random_seed
-      - date_range
+  processed_parquet: data/processed/BTCUSDT_4h_features.parquet
+  results_dir: results

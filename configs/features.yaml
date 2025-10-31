@@ -1,0 +1,26 @@
+base_stoch_ema:
+  indicators:
+    - kind: "stoch"
+      tf: "4h"
+      k: 14
+      d: 3
+      smooth_k: 6
+    - kind: "ema"
+      tf: "4h"
+      length: 50
+    - kind: "ema"
+      tf: "4h"
+      length: 200
+    - kind: "stoch"
+      tf: "1D"
+      k: 14
+      d: 3
+      smooth_k: 6
+    - kind: "ema"
+      tf: "1D"
+      length: 50
+    - kind: "stoch"
+      tf: "1W"
+      k: 14
+      d: 3
+      smooth_k: 6
