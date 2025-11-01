@@ -1,0 +1,112 @@
+/workspaces/quant-ml-btc/src/strategies/weekly_oscillator_pa.py:87: UserWarning: Converting to PeriodArray/Index representation will drop timezone information.
+  df["week_start"] = df.index.to_period("W-MON").start_time
+🚀 Building ML dataset for BTC | 1W Osc + 4H PA Execution
+📂 Loaded cached BTCUSDT 4h data → 17973 rows
+📂 Loaded BTC 4H data → 17973 rows
+✅ Completed 39 trades | Final balance: $236,498.45
+🏆 Win rate: 43.6%
+✅ Strategy generated 39 trades
+🧱 Dataset rows: 17,146 | positives: 39
+💾 Saved → /workspaces/quant-ml-btc/data/datasets/btc_osc_pa_v1.parquet
+                               open      high       low     close       volume     k_week     d_week  weekly_bullish         atr      body  upper_wick  lower_wick  true_range_norm  atr_norm  kd_spread  k_below_thr  d_below_thr  weekly_bullish_int  dow  hour_bin  y    regime    weight
+timestamp                                                                                                                                                                                                                                                                                   
+2018-01-02 00:00:00+00:00  13382.16  13850.00  13231.96  13353.78  2365.532926  79.468474  85.055952           False  639.905714 -0.002125    0.035034    0.009123         0.046282  0.047919  -5.587477            0            0                   0    1         0  0      bear  0.086013
+2018-01-02 04:00:00+00:00  13353.78  13480.84  12890.02  13343.00  2980.316053  79.468474  85.055952           False  616.964286 -0.000808    0.009523    0.033949         0.044279  0.046239  -5.587477            0            0                   0    1         4  0      bear  0.086013
+2018-01-02 08:00:00+00:00  13343.01  13617.28  13302.59  13490.00  2596.182674  79.468474  85.055952           False  549.367857  0.010896    0.009435    0.002996         0.023328  0.040724  -5.587477            0            0                   0    1         8  0      bear  0.086095
+2018-01-02 12:00:00+00:00  13490.00  13894.86  13450.46  13690.03  3365.879508  79.468474  85.055952           False  536.898571  0.014611    0.014962    0.002888         0.032462  0.039218  -5.587477            0            0                   0    1        12  0      bear  0.086095
+2018-01-02 16:00:00+00:00  13690.02  15473.49  13503.00  14732.75  5090.273483  79.468474  85.055952           False  630.932143  0.070776    0.050278    0.012694         0.133749  0.042825  -5.587477            0            0                   0    1        16  0  sideways  0.076161
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/calibration.py:330: FutureWarning: The `cv='prefit'` option is deprecated in 1.6 and will be removed in 1.8. You can use CalibratedClassifierCV(FrozenEstimator(estimator)) instead.
+  warnings.warn(
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/metrics/_classification.py:1706: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/calibration.py:330: FutureWarning: The `cv='prefit'` option is deprecated in 1.6 and will be removed in 1.8. You can use CalibratedClassifierCV(FrozenEstimator(estimator)) instead.
+  warnings.warn(
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/metrics/_classification.py:1706: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/calibration.py:330: FutureWarning: The `cv='prefit'` option is deprecated in 1.6 and will be removed in 1.8. You can use CalibratedClassifierCV(FrozenEstimator(estimator)) instead.
+  warnings.warn(
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/metrics/_classification.py:1706: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/calibration.py:330: FutureWarning: The `cv='prefit'` option is deprecated in 1.6 and will be removed in 1.8. You can use CalibratedClassifierCV(FrozenEstimator(estimator)) instead.
+  warnings.warn(
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/metrics/_classification.py:1706: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/calibration.py:330: FutureWarning: The `cv='prefit'` option is deprecated in 1.6 and will be removed in 1.8. You can use CalibratedClassifierCV(FrozenEstimator(estimator)) instead.
+  warnings.warn(
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/metrics/_classification.py:1706: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+🚀 Training ML models on btc_osc_pa_v1 dataset
+📂 Loaded dataset: 17,146 rows, positives: 39
+🧪 Running 5-fold walk-forward validation...
+Fold 1: prec=0.000, rec=0.000, auc=0.952, sharpe=0.000
+Fold 2: prec=0.000, rec=0.000, auc=0.913, sharpe=0.000
+Fold 3: prec=0.000, rec=0.000, auc=0.929, sharpe=0.000
+Fold 4: prec=0.000, rec=0.000, auc=0.999, sharpe=0.000
+Fold 5: prec=0.000, rec=0.000, auc=0.983, sharpe=0.000
+
+📊 CV Summary:
+fold         3.000
+precision    0.000
+recall       0.000
+auc          0.955
+sharpe       0.000
+dtype: float64
+
+🏗️ Training final Logistic Regression + XGBoost models...
+💾 Saved models to /workspaces/quant-ml-btc/models
+🏁 Mean CV Sharpe: 0.000
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but StandardScaler was fitted with feature names
+  warnings.warn(
+/workspaces/quant-ml-btc/src/strategies/weekly_oscillator_pa.py:87: UserWarning: Converting to PeriodArray/Index representation will drop timezone information.
+  df["week_start"] = df.index.to_period("W-MON").start_time
+🚀 PNL-aware ML filter evaluation...
+📂 Dataset → 17,146 rows | positives: 39
+🎯 ROC-AUC  logreg=0.970 | xgb=1.000
+📂 Loaded cached BTCUSDT 4h data → 17973 rows
+✅ Completed 39 trades | Final balance: $236,498.45
+🏆 Win rate: 43.6%
+💰 Realized trade PnL joined: 39 / 39 entries
+
+📊 PnL-based Threshold Summary (head):
+ threshold  trades  win_rate  profit_factor   sharpe  gross_pnl     avg_pnl
+      0.01      39  0.435897       5.007069 0.365311  186498.46 4782.011795
+      0.02      39  0.435897       5.007069 0.365311  186498.46 4782.011795
+      0.03      39  0.435897       5.007069 0.365311  186498.46 4782.011795
+      0.04      39  0.435897       5.007069 0.365311  186498.46 4782.011795
+      0.05      39  0.435897       5.007069 0.365311  186498.46 4782.011795
+      0.06      39  0.435897       5.007069 0.365311  186498.46 4782.011795
+      0.07      39  0.435897       5.007069 0.365311  186498.46 4782.011795
+      0.08      39  0.435897       5.007069 0.365311  186498.46 4782.011795
+      0.09      39  0.435897       5.007069 0.365311  186498.46 4782.011795
+      0.10      39  0.435897       5.007069 0.365311  186498.46 4782.011795
+
+🏁 Best by Sharpe: τ=0.470 | trades=35.0 | WR=45.71% | PF=5.51 | Sharpe=0.395 | Gross=$189113.78
+💾 Saved CSV → /workspaces/quant-ml-btc/results/ml_filter_pnl_sweep.csv
+🖼️ Plot saved → /workspaces/quant-ml-btc/results/ml_filter_pnl_sweep_20251101_174945.png
+
+✅ Accepted trades: 35 | ❌ Rejected trades: 4 (τ=0.47)
+💾 Detailed filtered-trade log saved → /workspaces/quant-ml-btc/results/ml_filtered_trades.csv
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but StandardScaler was fitted with feature names
+  warnings.warn(
+🧠 ML Feature Insight Analysis...
+📂 Dataset loaded → 17,146 rows | features=11
+🔍 Calculating feature importances...
+💾 Feature importance saved → /workspaces/quant-ml-btc/results/feature_importance/feature_importance_summary.csv
+🖼️ Saved → feature_importance_top10.png
+⚙️ Running SHAP explainability on XGBoost...
+🖼️ Saved → shap_summary.png
+🖼️ Saved dependence plots for top 5 features: ['weekly_bullish_int', 'k_below_thr', 'd_below_thr', 'kd_spread', 'dow']
+✅ Feature insight analysis complete.
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but StandardScaler was fitted with feature names
+  warnings.warn(
+/workspaces/quant-ml-btc/src/strategies/weekly_oscillator_pa.py:87: UserWarning: Converting to PeriodArray/Index representation will drop timezone information.
+  df["week_start"] = df.index.to_period("W-MON").start_time
+🧾 ML Filter Trade Report...
+📂 Loaded cached BTCUSDT 4h data → 17973 rows
+✅ Completed 39 trades | Final balance: $236,498.45
+🏆 Win rate: 43.6%
+⚙️ Computing SHAP values for entry bars...
+💾 CSV  → /workspaces/quant-ml-btc/results/ml_filter_trade_report.csv
+💾 Text → /workspaces/quant-ml-btc/results/ml_filter_trade_report.txt
+🖼️ Saved → /workspaces/quant-ml-btc/results/ml_filter_reason_counts.png
+✅ ML filter report complete.

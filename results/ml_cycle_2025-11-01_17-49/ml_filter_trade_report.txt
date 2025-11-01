@@ -1,0 +1,194 @@
+🟢 2018-04-17 04:00:00+00:00 | ACCEPTED | p=0.50 | pnl=-1000.01
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ➖ candle body: moderate; ➖ true range: moderate; ➖ ATR: moderate; ✅ early-week timing
+   • Top + drivers: kd_spread (+1.44), dow (+1.19)
+   • Top − drivers: lower_wick (-0.67), atr_norm (-0.55)
+
+🔴 2018-05-27 12:00:00+00:00 | REJECTED | p=0.45 | pnl=-980.01
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ➖ candle body: moderate; ➖ true range: moderate; ➖ ATR: moderate; ⚠️ weekend timing
+   • Top + drivers: kd_spread (+1.54), k_below_thr (+0.39)
+   • Top − drivers: dow (-1.30), hour_bin (-0.24)
+
+🟢 2018-07-03 00:00:00+00:00 | ACCEPTED | p=0.54 | pnl=-705.86
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: low; ➖ candle body: moderate; ➖ true range: moderate; ➖ ATR: moderate; ✅ early-week timing
+   • Top + drivers: dow (+1.29), kd_spread (+1.02)
+   • Top − drivers: atr_norm (-0.56), true_range_norm (-0.49)
+
+🔴 2018-08-21 20:00:00+00:00 | REJECTED | p=0.46 | pnl=2022.19
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ➖ candle body: moderate; ➖ true range: moderate; ➖ ATR: moderate; ✅ early-week timing
+   • Top + drivers: dow (+0.89), kd_spread (+0.74)
+   • Top − drivers: hour_bin (-0.97), atr_norm (-0.55)
+
+🟢 2018-09-18 08:00:00+00:00 | ACCEPTED | p=0.49 | pnl=-986.70
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ✅ candle body: low; ➖ true range: moderate; ➖ ATR: moderate; ✅ early-week timing
+   • Top + drivers: dow (+1.33), kd_spread (+1.24)
+   • Top − drivers: body (-0.88), upper_wick (-0.60)
+
+🟢 2018-09-20 00:00:00+00:00 | ACCEPTED | p=0.48 | pnl=840.68
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ➖ candle body: moderate; ✅ true range: low; ➖ ATR: moderate; ➖ mid-week timing
+   • Top + drivers: kd_spread (+1.34), k_below_thr (+0.45)
+   • Top − drivers: dow (-1.40), atr_norm (-0.32)
+
+🟢 2018-10-24 04:00:00+00:00 | ACCEPTED | p=0.49 | pnl=-983.83
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: low; ➖ candle body: moderate; ✅ true range: low; ✅ ATR: low; ✅ early-week timing
+   • Top + drivers: kd_spread (+1.50), atr_norm (+0.79)
+   • Top − drivers: dow (-0.91), upper_wick (-0.60)
+
+🟢 2018-12-28 12:00:00+00:00 | ACCEPTED | p=0.54 | pnl=-964.13
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ⚠️ candle body: high; ⚠️ true range: high; ⚠️ ATR: high; ➖ mid-week timing
+   • Top + drivers: kd_spread (+1.39), body (+0.87)
+   • Top − drivers: dow (-0.92), lower_wick (-0.63)
+
+🟢 2019-01-14 12:00:00+00:00 | ACCEPTED | p=0.56 | pnl=-944.83
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ⚠️ candle body: high; ⚠️ true range: high; ➖ ATR: moderate; ✅ early-week timing
+   • Top + drivers: kd_spread (+1.35), true_range_norm (+0.89)
+   • Top − drivers: dow (-1.00), upper_wick (-0.26)
+
+🟢 2019-02-16 00:00:00+00:00 | ACCEPTED | p=0.48 | pnl=46985.46
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ➖ candle body: moderate; ✅ true range: low; ✅ ATR: low; ⚠️ weekend timing
+   • Top + drivers: kd_spread (+1.50), hour_bin (+0.44)
+   • Top − drivers: dow (-1.16), lower_wick (-0.60)
+
+🔴 2019-11-02 12:00:00+00:00 | REJECTED | p=0.44 | pnl=-1865.68
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: high; ➖ candle body: moderate; ➖ true range: moderate; ➖ ATR: moderate; ⚠️ weekend timing
+   • Top + drivers: lower_wick (+0.47), k_below_thr (+0.41)
+   • Top − drivers: true_range_norm (-0.85), dow (-0.64)
+
+🟢 2019-11-10 16:00:00+00:00 | ACCEPTED | p=0.50 | pnl=-1828.35
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: high; ⚠️ candle body: high; ⚠️ true range: high; ➖ ATR: moderate; ⚠️ weekend timing
+   • Top + drivers: body (+1.59), true_range_norm (+1.09)
+   • Top − drivers: dow (-0.39), lower_wick (-0.27)
+
+🔴 2019-11-16 20:00:00+00:00 | REJECTED | p=0.46 | pnl=-1791.82
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: high; ➖ candle body: moderate; ✅ true range: low; ✅ ATR: low; ⚠️ weekend timing
+   • Top + drivers: upper_wick (+0.72), kd_spread (+0.63)
+   • Top − drivers: dow (-0.58), true_range_norm (-0.58)
+
+🟢 2019-11-26 00:00:00+00:00 | ACCEPTED | p=0.55 | pnl=191.28
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ➖ candle body: moderate; ➖ true range: moderate; ⚠️ ATR: high; ✅ early-week timing
+   • Top + drivers: kd_spread (+1.37), dow (+1.25)
+   • Top − drivers: body (-0.49), true_range_norm (-0.48)
+
+🟢 2019-12-31 00:00:00+00:00 | ACCEPTED | p=0.50 | pnl=-1759.78
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: high; ✅ candle body: low; ➖ true range: moderate; ✅ ATR: low; ✅ early-week timing
+   • Top + drivers: dow (+1.42), hour_bin (+1.21)
+   • Top − drivers: body (-0.84), lower_wick (-0.83)
+
+🟢 2020-01-03 04:00:00+00:00 | ACCEPTED | p=0.54 | pnl=8118.36
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: high; ⚠️ candle body: high; ⚠️ true range: high; ➖ ATR: moderate; ➖ mid-week timing
+   • Top + drivers: true_range_norm (+1.10), body (+0.74)
+   • Top − drivers: dow (-1.18), hour_bin (-0.30)
+
+🟢 2020-04-14 08:00:00+00:00 | ACCEPTED | p=0.50 | pnl=14228.78
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: low; ➖ candle body: moderate; ➖ true range: moderate; ⚠️ ATR: high; ✅ early-week timing
+   • Top + drivers: dow (+1.26), kd_spread (+1.26)
+   • Top − drivers: true_range_norm (-0.71), atr_norm (-0.56)
+
+🟢 2020-10-13 00:00:00+00:00 | ACCEPTED | p=0.49 | pnl=33606.58
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: high; ✅ candle body: low; ➖ true range: moderate; ✅ ATR: low; ✅ early-week timing
+   • Top + drivers: dow (+1.34), hour_bin (+1.30)
+   • Top − drivers: body (-1.01), upper_wick (-0.86)
+
+🟢 2021-07-27 00:00:00+00:00 | ACCEPTED | p=0.49 | pnl=2669.20
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: high; ✅ candle body: low; ➖ true range: moderate; ⚠️ ATR: high; ✅ early-week timing
+   • Top + drivers: dow (+1.32), hour_bin (+1.05)
+   • Top − drivers: body (-1.38), lower_wick (-0.68)
+
+🟢 2022-02-08 00:00:00+00:00 | ACCEPTED | p=0.55 | pnl=-2897.03
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: low; ➖ candle body: moderate; ➖ true range: moderate; ➖ ATR: moderate; ✅ early-week timing
+   • Top + drivers: dow (+1.34), kd_spread (+1.34)
+   • Top − drivers: lower_wick (-0.66), atr_norm (-0.55)
+
+🟢 2022-02-24 20:00:00+00:00 | ACCEPTED | p=0.51 | pnl=1302.83
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: high; ⚠️ candle body: high; ⚠️ true range: high; ⚠️ ATR: high; ➖ mid-week timing
+   • Top + drivers: body (+1.25), true_range_norm (+1.16)
+   • Top − drivers: atr_norm (-0.48), dow (-0.33)
+
+🟢 2022-06-21 04:00:00+00:00 | ACCEPTED | p=0.55 | pnl=-626.65
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: low; ⚠️ candle body: high; ⚠️ true range: high; ⚠️ ATR: high; ✅ early-week timing
+   • Top + drivers: dow (+0.93), true_range_norm (+0.65)
+   • Top − drivers: lower_wick (-0.61), hour_bin (-0.22)
+
+🟢 2022-07-19 00:00:00+00:00 | ACCEPTED | p=0.50 | pnl=-2852.61
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ✅ candle body: low; ⚠️ true range: high; ⚠️ ATR: high; ✅ early-week timing
+   • Top + drivers: kd_spread (+1.19), dow (+1.15)
+   • Top − drivers: body (-1.72), upper_wick (-0.28)
+
+🟢 2022-08-29 12:00:00+00:00 | ACCEPTED | p=0.55 | pnl=30.16
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ⚠️ candle body: high; ➖ true range: moderate; ➖ ATR: moderate; ✅ early-week timing
+   • Top + drivers: kd_spread (+1.50), body (+1.22)
+   • Top − drivers: dow (-1.46), lower_wick (-0.25)
+
+🟢 2022-09-06 08:00:00+00:00 | ACCEPTED | p=0.51 | pnl=-2796.15
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ✅ candle body: low; ✅ true range: low; ✅ ATR: low; ✅ early-week timing
+   • Top + drivers: kd_spread (+1.48), dow (+1.21)
+   • Top − drivers: hour_bin (-0.40), upper_wick (-0.24)
+
+🟢 2022-09-07 20:00:00+00:00 | ACCEPTED | p=0.51 | pnl=-2740.26
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ➖ candle body: moderate; ➖ true range: moderate; ➖ ATR: moderate; ✅ early-week timing
+   • Top + drivers: kd_spread (+1.48), body (+0.75)
+   • Top − drivers: dow (-0.52), atr_norm (-0.46)
+
+🟢 2022-09-19 12:00:00+00:00 | ACCEPTED | p=0.55 | pnl=623.62
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: low; ⚠️ candle body: high; ⚠️ true range: high; ➖ ATR: moderate; ✅ early-week timing
+   • Top + drivers: kd_spread (+1.36), body (+1.21)
+   • Top − drivers: dow (-0.77), atr_norm (-0.56)
+
+🟢 2022-10-11 08:00:00+00:00 | ACCEPTED | p=0.52 | pnl=-2697.93
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: low; ➖ candle body: moderate; ✅ true range: low; ✅ ATR: low; ✅ early-week timing
+   • Top + drivers: kd_spread (+1.55), dow (+1.25)
+   • Top − drivers: hour_bin (-0.34), atr_norm (-0.24)
+
+🟢 2022-10-13 16:00:00+00:00 | ACCEPTED | p=0.52 | pnl=435.86
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: low; ⚠️ candle body: high; ⚠️ true range: high; ➖ ATR: moderate; ➖ mid-week timing
+   • Top + drivers: kd_spread (+1.33), body (+1.23)
+   • Top − drivers: dow (-0.42), lower_wick (-0.38)
+
+🟢 2022-11-01 00:00:00+00:00 | ACCEPTED | p=0.51 | pnl=-1364.57
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: high; ✅ candle body: low; ✅ true range: low; ✅ ATR: low; ✅ early-week timing
+   • Top + drivers: dow (+1.27), hour_bin (+1.16)
+   • Top − drivers: body (-0.54), lower_wick (-0.45)
+
+🟢 2022-12-20 08:00:00+00:00 | ACCEPTED | p=0.51 | pnl=24200.50
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: low; ➖ candle body: moderate; ✅ true range: low; ✅ ATR: low; ✅ early-week timing
+   • Top + drivers: dow (+1.34), kd_spread (+1.32)
+   • Top − drivers: upper_wick (-0.70), true_range_norm (-0.54)
+
+🟢 2023-10-03 00:00:00+00:00 | ACCEPTED | p=0.50 | pnl=34018.78
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: high; ➖ candle body: moderate; ➖ true range: moderate; ➖ ATR: moderate; ✅ early-week timing
+   • Top + drivers: dow (+1.27), hour_bin (+1.04)
+   • Top − drivers: upper_wick (-0.93), body (-0.30)
+
+🟢 2024-07-23 00:00:00+00:00 | ACCEPTED | p=0.51 | pnl=-3789.76
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ✅ candle body: low; ✅ true range: low; ➖ ATR: moderate; ✅ early-week timing
+   • Top + drivers: dow (+1.37), hour_bin (+1.13)
+   • Top − drivers: body (-0.54), upper_wick (-0.25)
+
+🟢 2024-08-01 20:00:00+00:00 | ACCEPTED | p=0.55 | pnl=-3713.97
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ⚠️ candle body: high; ⚠️ true range: high; ➖ ATR: moderate; ➖ mid-week timing
+   • Top + drivers: kd_spread (+1.51), body (+1.26)
+   • Top − drivers: atr_norm (-0.40), dow (-0.37)
+
+🟢 2024-08-06 16:00:00+00:00 | ACCEPTED | p=0.50 | pnl=3251.64
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ➖ candle body: moderate; ➖ true range: moderate; ⚠️ ATR: high; ✅ early-week timing
+   • Top + drivers: kd_spread (+1.59), dow (+0.99)
+   • Top − drivers: hour_bin (-0.86), atr_norm (-0.44)
+
+🟢 2024-09-10 00:00:00+00:00 | ACCEPTED | p=0.52 | pnl=36060.25
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: low; ✅ candle body: low; ➖ true range: moderate; ➖ ATR: moderate; ✅ early-week timing
+   • Top + drivers: dow (+1.35), kd_spread (+1.13)
+   • Top − drivers: body (-1.53), lower_wick (-0.33)
+
+🟢 2025-04-08 08:00:00+00:00 | ACCEPTED | p=0.52 | pnl=-4425.93
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ➖ candle body: moderate; ➖ true range: moderate; ⚠️ ATR: high; ✅ early-week timing
+   • Top + drivers: kd_spread (+1.64), dow (+1.40)
+   • Top − drivers: upper_wick (-0.66), true_range_norm (-0.28)
+
+🟢 2025-04-09 12:00:00+00:00 | ACCEPTED | p=0.52 | pnl=24454.65
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ✅ K–D spread: moderate; ➖ candle body: moderate; ➖ true range: moderate; ⚠️ ATR: high; ✅ early-week timing
+   • Top + drivers: kd_spread (+1.49), true_range_norm (+0.69)
+   • Top − drivers: dow (-0.58), upper_wick (-0.46)
+
+🟢 2025-09-30 00:00:00+00:00 | ACCEPTED | p=0.50 | pnl=-4826.50
+   • ✅ weekly bias bullish; ✅ early-cycle: K & D below threshold; ⚠️ K–D spread: high; ✅ candle body: low; ✅ true range: low; ✅ ATR: low; ✅ early-week timing
+   • Top + drivers: dow (+1.21), hour_bin (+1.03)
+   • Top − drivers: kd_spread (-1.49), upper_wick (0.08)

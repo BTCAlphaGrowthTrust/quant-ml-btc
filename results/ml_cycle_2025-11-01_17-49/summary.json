@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-11-01_17-49",
+  "results_dir": "/workspaces/quant-ml-btc/results/ml_cycle_2025-11-01_17-49",
+  "steps": [
+    "dataset",
+    "train",
+    "filter",
+    "insight",
+    "report"
+  ]
+}
