@@ -16,7 +16,6 @@ Designed and maintained by **Tom Makin (BTC Alpha Growth Trust)**.
 ---
 
 ## 📁 Project Structure
-
 quant-ml-btc/
 ├── README.md
 ├── configs/
@@ -42,6 +41,8 @@ quant-ml-btc/
 │ └── pipeline.py
 └── run.py
 
+---
+
 ## ⚙️ Installation
 ```bash
 python -m venv .venv
@@ -65,16 +66,13 @@ tom_makin_4h_golden_4h_pa	btc_4h_golden_4h_pa.py	Momentum Continuation	4H EMA50/
 All four run through the same ML + conviction pipeline.
 
 🧪 One-Click Pipeline Commands
-
 🔹 1. Build Datasets
-
 python -m src.features.build_dataset --strategy tom_makin_1m_osc_4h_pa
 python -m src.features.build_dataset --strategy tom_makin_1w_osc_4h_pa
 python -m src.features.build_dataset --strategy tom_makin_1d_golden_4h_pa
 python -m src.features.build_dataset --strategy tom_makin_4h_golden_4h_pa
 
-Each produces a timestamped dataset in:
-
+Each produces:
 data/datasets/<strategy_name>_v1.parquet
 
 🔹 2. Train Conviction Models
@@ -83,11 +81,10 @@ python -m src.ml.train --dataset tom_makin_1w_osc_4h_pa_v1
 python -m src.ml.train --dataset tom_makin_1d_golden_4h_pa_v1
 python -m src.ml.train --dataset tom_makin_4h_golden_4h_pa_v1
 
-
 Each outputs:
 models/<strategy_name>_v1.pkl
 data/results/<strategy_name>_v1_conviction_curve.csv
-results/trade_log_<strategy_name>_timestamp.csv
+results/trade_log_<strategy_name>_<timestamp>.csv
 
 🔹 3. Inspect Conviction Curves
 ls data/results/*conviction_curve.csv
@@ -96,14 +93,13 @@ ls data/results/*conviction_curve.csv
 python -m src.backtest.run --strategy all
 
 🧬 Next Steps
-- 🧩 Ensemble the 4 conviction models (Meta-Alpha Combiner)
-- 📊 Add unified performance dashboard (equity curves, risk overlays)
-- 🔔 Connect TradingView webhooks for live execution filtering
+
+🧩 Ensemble the 4 conviction models (Meta-Alpha Combiner)
+📊 Add unified performance dashboard (equity curves, risk overlays)
+🔔 Connect TradingView webhooks for live execution filtering
 
 🚑 Recovery Procedure
-
 If your environment resets or Codespace is wiped:
-
 # 1️⃣ Recreate the environment
 python -m venv .venv
 source .venv/bin/activate
@@ -121,15 +117,4 @@ python -m src.ml.train --dataset tom_makin_1m_osc_4h_pa_v1
 
 Tom Makin
 BTC Alpha Growth Trust
-github.com/BTCAlphaGrowthTrust/quant-ml-btc
-
-
----
-
-✅ Just copy and paste that entire block into `README.md` (replacing the old content),  
-then run:
-
-```bash
-git add README.md
-git commit -m "🧠 Updated README to document 4-strategy ML pipeline and commands"
-git push origin main
+🔗 github.com/BTCAlphaGrowthTrust/quant-ml-btc

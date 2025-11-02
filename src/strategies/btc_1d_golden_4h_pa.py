@@ -99,10 +99,20 @@ class DailyGoldenCrossPA(BaseStrategy):
         ma_slow = self.ema(df_daily["close"], self.slow_len)
         golden_cross = ma_fast > ma_slow
 
+        # --- Align indexes for safe reindex ---
+        df_daily["timestamp"] = pd.to_datetime(df_daily["timestamp"], utc=True)
+        ma_fast.index = pd.to_datetime(df_daily["timestamp"], utc=True)
+        ma_slow.index = pd.to_datetime(df_daily["timestamp"], utc=True)
+        golden_cross.index = pd.to_datetime(df_daily["timestamp"], utc=True)
+
+        if df.index.tz is None:
+            df.index = pd.to_datetime(df.index, utc=True)
+
         # Map daily data back to 4H
         df["ma_fast_d"] = ma_fast.reindex(df.index, method="ffill")
         df["ma_slow_d"] = ma_slow.reindex(df.index, method="ffill")
         df["golden_cross_d"] = golden_cross.reindex(df.index, method="ffill")
+
 
         # Price filter (must be below slow MA × (1 + pct))
         df["price_filter"] = df["close"] <= df["ma_slow_d"] * (1 + self.price_filter_pct)

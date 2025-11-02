@@ -1,0 +1,144 @@
+
+
+==== Building dataset for tom_makin_1w_osc_4h_pa ====
+🚀 Building ML dataset for tom_makin_1w_osc_4h_pa
+📂 Loaded cached BTCUSDT 4h data → 17973 rows
+📂 Loaded BTC 4H data → 17973 rows
+✅ Completed 39 trades | Final balance: $236,498.45
+🏆 Win rate: 43.6%
+💾 Trade log saved → results/trade_log_tom_makin_1w_osc_4h_pa_20251102_160741.csv
+🖼️ Plot saved → results/chart_tom_makin_1w_osc_4h_pa_20251102_160741.png
+✅ Strategy generated 39 trades
+✅ Features built for tom_makin_1w_osc_4h_pa: 17973 rows | positives: 39
+💾 Saved → /workspaces/quant-ml-btc/data/datasets/tom_makin_1w_osc_4h_pa_v1.parquet
+                              open     high      low    close      volume  k_week  d_week  weekly_bullish  atr      body  upper_wick  lower_wick  true_range_norm  atr_norm  kd_spread  k_below_thr  d_below_thr  bullish_int  dow  hour_bin  y    regime    weight
+timestamp                                                                                                                                                                                                                                                          
+2017-08-17 04:00:00+00:00  4261.48  4349.99  4261.32  4349.99   82.088865     NaN     NaN           False  NaN  0.020347    0.000000    0.000037         0.020384       NaN        NaN            0            0            0    3         4  0  sideways  0.066744
+2017-08-17 08:00:00+00:00  4333.32  4485.39  4333.32  4427.30   63.619882     NaN     NaN           False  NaN  0.021227    0.013121    0.000000         0.034348       NaN        NaN            0            0            0    3         8  0  sideways  0.066808
+2017-08-17 12:00:00+00:00  4436.06  4485.39  4333.42  4352.34  174.562001     NaN     NaN           False  NaN -0.019236    0.011334    0.004347         0.034917       NaN        NaN            0            0            0    3        12  0  sideways  0.066808
+2017-08-17 16:00:00+00:00  4352.33  4354.84  4200.74  4325.23  225.109716     NaN     NaN           False  NaN -0.006266    0.000580    0.028782         0.035628       NaN        NaN            0            0            0    3        16  0  sideways  0.066808
+2017-08-17 20:00:00+00:00  4307.56  4369.69  4258.56  4285.08  249.769913     NaN     NaN           False  NaN -0.005246    0.014499    0.006189         0.025934       NaN        NaN            0            0            0    3        20  0  sideways  0.066808
+/workspaces/quant-ml-btc/src/strategies/weekly_oscillator_pa.py:87: UserWarning: Converting to PeriodArray/Index representation will drop timezone information.
+  df["week_start"] = df.index.to_period("W-MON").start_time
+
+
+==== Training ML model for tom_makin_1w_osc_4h_pa ====
+🚀 Training conviction-based ML models on tom_makin_1w_osc_4h_pa_v1
+📂 Loaded dataset: 17,973 rows | positives: 39
+🧪 Performing 5-fold walk-forward CV...
+Fold 1: AUC=0.910
+Fold 2: AUC=0.934
+Fold 3: AUC=0.929
+Fold 4: AUC=0.999
+Fold 5: AUC=0.986
+
+📊 CV Summary:
+fold    3.000
+auc     0.952
+dtype: float64
+
+🏗️ Training final Logistic Regression + XGBoost models...
+💾 Conviction curve saved → data/results/tom_makin_1w_osc_4h_pa_v1_conviction_curve.csv
+📈 Plot saved → tom_makin_1w_osc_4h_pa_v1_conviction_curve.png
+💾 Saved models → models/tom_makin_1w_osc_4h_pa_v1.pkl
+🏁 Mean CV AUC: 0.952
+✅ Conviction-based training complete.
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/calibration.py:330: FutureWarning: The `cv='prefit'` option is deprecated in 1.6 and will be removed in 1.8. You can use CalibratedClassifierCV(FrozenEstimator(estimator)) instead.
+  warnings.warn(
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/calibration.py:330: FutureWarning: The `cv='prefit'` option is deprecated in 1.6 and will be removed in 1.8. You can use CalibratedClassifierCV(FrozenEstimator(estimator)) instead.
+  warnings.warn(
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/calibration.py:330: FutureWarning: The `cv='prefit'` option is deprecated in 1.6 and will be removed in 1.8. You can use CalibratedClassifierCV(FrozenEstimator(estimator)) instead.
+  warnings.warn(
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/calibration.py:330: FutureWarning: The `cv='prefit'` option is deprecated in 1.6 and will be removed in 1.8. You can use CalibratedClassifierCV(FrozenEstimator(estimator)) instead.
+  warnings.warn(
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/calibration.py:330: FutureWarning: The `cv='prefit'` option is deprecated in 1.6 and will be removed in 1.8. You can use CalibratedClassifierCV(FrozenEstimator(estimator)) instead.
+  warnings.warn(
+
+
+==== Building dataset for tom_makin_1m_osc_4h_pa ====
+🚀 Building ML dataset for tom_makin_1m_osc_4h_pa
+📂 Loaded cached BTCUSDT 4h data → 17973 rows
+📂 Loaded BTC 4H data → 17973 rows
+✅ Completed 12 trades | Final balance: $198,385.94
+🏆 Win rate: 16.7%
+💾 Trade log saved → results/trade_log_tom_makin_1m_osc_4h_pa_20251102_160747.csv
+✅ Strategy generated 12 trades
+✅ Features built for tom_makin_1m_osc_4h_pa: 17973 rows | positives: 12
+💾 Saved → /workspaces/quant-ml-btc/data/datasets/tom_makin_1m_osc_4h_pa_v1.parquet
+                              open     high      low    close      volume  k_month  d_month monthly_bullish  lowest_low_5      body  upper_wick  lower_wick  true_range_norm  kd_spread  k_below_thr  d_below_thr  bullish_int  dow  hour_bin  y    regime    weight
+timestamp                                                                                                                                                                                                                                                           
+2017-08-17 04:00:00+00:00  4261.48  4349.99  4261.32  4349.99   82.088865      NaN      NaN             NaN           NaN  0.020347    0.000000    0.000037         0.020384        NaN            0            0            0    3         4  0  sideways  0.066744
+2017-08-17 08:00:00+00:00  4333.32  4485.39  4333.32  4427.30   63.619882      NaN      NaN             NaN           NaN  0.021227    0.013121    0.000000         0.034348        NaN            0            0            0    3         8  0  sideways  0.066808
+2017-08-17 12:00:00+00:00  4436.06  4485.39  4333.42  4352.34  174.562001      NaN      NaN             NaN           NaN -0.019236    0.011334    0.004347         0.034917        NaN            0            0            0    3        12  0  sideways  0.066808
+2017-08-17 16:00:00+00:00  4352.33  4354.84  4200.74  4325.23  225.109716      NaN      NaN             NaN           NaN -0.006266    0.000580    0.028782         0.035628        NaN            0            0            0    3        16  0  sideways  0.066808
+2017-08-17 20:00:00+00:00  4307.56  4369.69  4258.56  4285.08  249.769913      NaN      NaN             NaN       4200.74 -0.005246    0.014499    0.006189         0.025934        NaN            0            0            0    3        20  0  sideways  0.066808
+/workspaces/quant-ml-btc/src/features/build_dataset.py:47: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  df["bullish_int"] = df.get(bias_col, False).fillna(False).astype(int)
+
+
+==== Training ML model for tom_makin_1m_osc_4h_pa ====
+🚀 Training conviction-based ML models on tom_makin_1m_osc_4h_pa_v1
+📂 Loaded dataset: 17,973 rows | positives: 12
+🧪 Performing 5-fold walk-forward CV...
+⚠️  Skipping fold 1: only one class present in training data.
+Fold 2: AUC=0.864
+Fold 3: AUC=0.994
+Fold 4: AUC=0.987
+Fold 5: AUC=nan
+
+📊 CV Summary:
+fold    3.500
+auc     0.948
+dtype: float64
+
+🏗️ Training final Logistic Regression + XGBoost models...
+💾 Conviction curve saved → data/results/tom_makin_1m_osc_4h_pa_v1_conviction_curve.csv
+📈 Plot saved → tom_makin_1m_osc_4h_pa_v1_conviction_curve.png
+💾 Saved models → models/tom_makin_1m_osc_4h_pa_v1.pkl
+🏁 Mean CV AUC: 0.948
+✅ Conviction-based training complete.
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/calibration.py:330: FutureWarning: The `cv='prefit'` option is deprecated in 1.6 and will be removed in 1.8. You can use CalibratedClassifierCV(FrozenEstimator(estimator)) instead.
+  warnings.warn(
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/calibration.py:330: FutureWarning: The `cv='prefit'` option is deprecated in 1.6 and will be removed in 1.8. You can use CalibratedClassifierCV(FrozenEstimator(estimator)) instead.
+  warnings.warn(
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/calibration.py:330: FutureWarning: The `cv='prefit'` option is deprecated in 1.6 and will be removed in 1.8. You can use CalibratedClassifierCV(FrozenEstimator(estimator)) instead.
+  warnings.warn(
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/calibration.py:330: FutureWarning: The `cv='prefit'` option is deprecated in 1.6 and will be removed in 1.8. You can use CalibratedClassifierCV(FrozenEstimator(estimator)) instead.
+  warnings.warn(
+/home/codespace/.local/lib/python3.12/site-packages/sklearn/metrics/_ranking.py:424: UndefinedMetricWarning: Only one class is present in y_true. ROC AUC score is not defined in that case.
+  warnings.warn(
+
+
+==== Building dataset for tom_makin_1d_golden_4h_pa ====
+🚀 Building ML dataset for tom_makin_1d_golden_4h_pa
+📂 Loaded cached BTCUSDT 4h data → 17973 rows
+📂 Loaded BTC 4H data → 17973 rows
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspaces/quant-ml-btc/src/features/build_dataset.py", line 134, in <module>
+    main()
+  File "/workspaces/quant-ml-btc/src/features/build_dataset.py", line 116, in main
+    _ = strat.generate_signals(df)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/quant-ml-btc/src/strategies/btc_1d_golden_4h_pa.py", line 103, in generate_signals
+    df["ma_fast_d"] = ma_fast.reindex(df.index, method="ffill")
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/codespace/.local/lib/python3.12/site-packages/pandas/core/series.py", line 5164, in reindex
+    return super().reindex(
+           ^^^^^^^^^^^^^^^^
+  File "/home/codespace/.local/lib/python3.12/site-packages/pandas/core/generic.py", line 5629, in reindex
+    return self._reindex_axes(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/codespace/.local/lib/python3.12/site-packages/pandas/core/generic.py", line 5652, in _reindex_axes
+    new_index, indexer = ax.reindex(
+                         ^^^^^^^^^^^
+  File "/home/codespace/.local/lib/python3.12/site-packages/pandas/core/indexes/base.py", line 4429, in reindex
+    indexer = self.get_indexer(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/codespace/.local/lib/python3.12/site-packages/pandas/core/indexes/base.py", line 3900, in get_indexer
+    return self._get_indexer_non_comparable(target, method=method, unique=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/codespace/.local/lib/python3.12/site-packages/pandas/core/indexes/base.py", line 6313, in _get_indexer_non_comparable
+    raise TypeError(f"Cannot compare dtypes {self.dtype} and {other_dtype}")
+TypeError: Cannot compare dtypes int64 and datetime64[ns, UTC]
