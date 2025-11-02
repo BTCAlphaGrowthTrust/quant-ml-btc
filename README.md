@@ -1,78 +1,135 @@
 # 🧠 Quant-ML-BTC
-Modular, config-driven machine-learning backtesting framework for BTC.
+**Modular, config-driven machine-learning backtesting framework for BTC.**
 
-## Overview
-Quant-ML-BTC lets you build, test, and compare trading systems on BTCUSDT using:
-- Multi-timeframe indicators (EMA, Stochastic, RSI, volatility)
-- ML models (Logistic Regression, XGBoost)
-- Configurable labeling (return-based, volatility-scaled)
-- Backtesting + metrics (PnL, Sharpe, Profit Factor, MDD)
-- Experiment logging to timestamped run folders
+---
 
-You control the pipeline by editing YAML configs (no hardcoded params).
+## 🧩 Overview
+Quant-ML-BTC provides a complete end-to-end research stack for BTC algorithmic systems:
+- Multi-timeframe signal generation (1M / 1W / 1D / 4H)
+- Config-driven backtesting and trade simulation
+- Machine learning conviction scoring (Logistic Regression, XGBoost)
+- Walk-forward validation for robustness
+- Easy expansion with plug-and-play strategy classes
 
-## Project Structure
+Designed and maintained by **Tom Makin (BTC Alpha Growth Trust)**.
+
+---
+
+## 📁 Project Structure
+
 quant-ml-btc/
 ├── README.md
 ├── configs/
-│   ├── config_default.yaml       # main run config
-│   ├── features.yaml             # feature menus (optional)
-│   └── model_params.yaml         # model params (optional)
+│ ├── config_default.yaml
+│ ├── features.yaml
+│ └── model_params.yaml
 ├── data/
-│   ├── raw/                      # downloaded OHLCV
-│   ├── processed/                # feature-enriched data
-│   └── reference/                # lookups/metadata
+│ ├── raw/ # downloaded OHLCV data
+│ ├── processed/ # feature-enriched frames
+│ ├── datasets/ # ML training datasets (.parquet)
+│ └── results/ # conviction curves & summaries
+├── models/ # saved ML models (.pkl)
+├── results/ # backtest logs & trade CSVs
 ├── src/
-│   ├── data_loader.py            # Binance loader & caching
-│   ├── feature_engineer.py       # RSI, volatility, EMA cross, etc.
-│   ├── labeler.py                # dynamic volatility-based labels
-│   ├── metrics_reporter.py       # Sharpe, Sortino, PF, MDD
-│   ├── strategies/               # rule-based systems
-│   │   ├── base_strategy.py
-│   │   └── (add your strategies here)
-│   └── pipeline.py               # end-to-end orchestrator
-├── results/
-│   ├── equity_curve.csv
-│   ├── metrics.csv
-│   ├── backtest_dataset.csv
-│   └── runs/run_YYYY-MM-DD_NNN/  # per-experiment artifacts
-├── docs/
-│   └── strategy_builder_context.txt
-└── run.py                        # CLI entrypoint
+│ ├── features/ # dataset builder logic
+│ ├── ml/ # model training + calibration
+│ ├── strategies/ # rule-based strategy modules
+│ │ ├── base_strategy.py
+│ │ ├── btc_1m_stoch_4h_pa.py
+│ │ ├── weekly_oscillator_pa.py
+│ │ ├── btc_1d_golden_4h_pa.py
+│ │ └── btc_4h_golden_4h_pa.py
+│ └── pipeline.py
+└── run.py
 
-## Installation
+## ⚙️ Installation
+```bash
 python -m venv .venv
-source .venv/bin/activate      # Windows: .venv\Scripts\activate
+source .venv/bin/activate        # (Windows: .venv\Scripts\activate)
 pip install -r requirements.txt
 
-## Usage
-python run.py --config configs/config_default.yaml
+🚀 Core Capabilities
+Layer	Function	Example
+Strategy	Defines rules (MA, Oscillator, PA)	src/strategies/
+Feature Builder	Generates trade labels + indicators	python -m src.features.build_dataset --strategy <name>
+ML Trainer	Fits calibrated ML models per strategy	python -m src.ml.train --dataset <name>_v1
+Conviction Curve	Produces confidence-weighted probabilities	Saved in /data/results/
+Registry	Unified strategy loader	load_strategy(name)
+🧠 Current Strategies
+Strategy	File	Type	Purpose
+tom_makin_1m_osc_4h_pa	btc_1m_stoch_4h_pa.py	Momentum Oscillator	Monthly stochastic bias + 4H execution
+tom_makin_1w_osc_4h_pa	weekly_oscillator_pa.py	Swing Oscillator	Weekly stochastic bias + 4H execution
+tom_makin_1d_golden_4h_pa	btc_1d_golden_4h_pa.py	Trend-Following	Daily EMA50/200 golden cross + 4H breakout
+tom_makin_4h_golden_4h_pa	btc_4h_golden_4h_pa.py	Momentum Continuation	4H EMA50/200 golden cross + 4H breakout
 
-Outputs (also mirrored under results/runs/...):
-- results/equity_curve.csv
-- results/metrics.csv
-- results/backtest_dataset.csv
+All four run through the same ML + conviction pipeline.
 
-## Config (example)
-data:
-  symbol: BTCUSDT
-  timeframe: 4h
-features:
-  ema_periods: [50, 200]
-  stochastic: [14, 6, 3]
-label:
-  horizon: 12
-  threshold: 0.01
-model:
-  type: xgboost
-  n_estimators: 150
-  max_depth: 4
-  learning_rate: 0.05
-backtest:
-  initial_capital: 100000
+🧪 One-Click Pipeline Commands
 
-## Strategy Builder
-See docs/strategy_builder_context.txt for how to author strategies under src/strategies/.
+🔹 1. Build Datasets
 
-Maintainer: Tom Makin
-Repo: BTCAlphaGrowthTrust/quant-ml-btc
+python -m src.features.build_dataset --strategy tom_makin_1m_osc_4h_pa
+python -m src.features.build_dataset --strategy tom_makin_1w_osc_4h_pa
+python -m src.features.build_dataset --strategy tom_makin_1d_golden_4h_pa
+python -m src.features.build_dataset --strategy tom_makin_4h_golden_4h_pa
+
+Each produces a timestamped dataset in:
+
+data/datasets/<strategy_name>_v1.parquet
+
+🔹 2. Train Conviction Models
+python -m src.ml.train --dataset tom_makin_1m_osc_4h_pa_v1
+python -m src.ml.train --dataset tom_makin_1w_osc_4h_pa_v1
+python -m src.ml.train --dataset tom_makin_1d_golden_4h_pa_v1
+python -m src.ml.train --dataset tom_makin_4h_golden_4h_pa_v1
+
+
+Each outputs:
+models/<strategy_name>_v1.pkl
+data/results/<strategy_name>_v1_conviction_curve.csv
+results/trade_log_<strategy_name>_timestamp.csv
+
+🔹 3. Inspect Conviction Curves
+ls data/results/*conviction_curve.csv
+
+🔹 4. (Optional) Backtest All Strategies
+python -m src.backtest.run --strategy all
+
+🧬 Next Steps
+- 🧩 Ensemble the 4 conviction models (Meta-Alpha Combiner)
+- 📊 Add unified performance dashboard (equity curves, risk overlays)
+- 🔔 Connect TradingView webhooks for live execution filtering
+
+🚑 Recovery Procedure
+
+If your environment resets or Codespace is wiped:
+
+# 1️⃣ Recreate the environment
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# 2️⃣ Pull the repo
+git clone https://github.com/BTCAlphaGrowthTrust/quant-ml-btc.git
+cd quant-ml-btc
+
+# 3️⃣ Run any strategy again
+python -m src.features.build_dataset --strategy tom_makin_1m_osc_4h_pa
+python -m src.ml.train --dataset tom_makin_1m_osc_4h_pa_v1
+
+👨‍💻 Maintainer
+
+Tom Makin
+BTC Alpha Growth Trust
+github.com/BTCAlphaGrowthTrust/quant-ml-btc
+
+
+---
+
+✅ Just copy and paste that entire block into `README.md` (replacing the old content),  
+then run:
+
+```bash
+git add README.md
+git commit -m "🧠 Updated README to document 4-strategy ML pipeline and commands"
+git push origin main

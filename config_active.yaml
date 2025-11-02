@@ -1,0 +1,6 @@
+strategy:
+  stoch_threshold: 60.0
+  lookback_bars: 10
+  atr_multiplier: 1.5
+  last_update: 2025-11-02 04:21:51 UTC
+  source: results/regime_selector_20251102_041052/regime_recommendations.csv

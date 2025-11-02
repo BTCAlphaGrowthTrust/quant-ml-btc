@@ -1,156 +1,193 @@
 # src/ml/train.py
 """
-Train v1 machine learning models on the BTC 1W Osc + 4H PA dataset.
-- Loads data from: data/datasets/btc_osc_pa_v1.parquet
-- Trains Logistic Regression + XGBoost
-- Walk-forward CV (time-based)
-- Saves best calibrated model to: models/btc_osc_pa_v1.pkl
+Conviction-Based ML Trainer (v2.1)
+---------------------------------
+Trains probabilistic models to detect rare, high-value trade events.
+Now robust to folds with only one class.
+
+Usage:
+    python -m src.ml.train --dataset tom_makin_1m_osc_4h_pa_v1
 """
 
 from pathlib import Path
-import numpy as np
-import pandas as pd
+import argparse
 import json
 import joblib
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.calibration import CalibratedClassifierCV
-from sklearn.metrics import precision_score, recall_score, roc_auc_score
-from sklearn.utils import compute_class_weight
+from sklearn.metrics import roc_auc_score
+from sklearn.utils.class_weight import compute_class_weight
 from xgboost import XGBClassifier
 
 
-# --- utility -----------------------------------------------------------------
-def sharpe_like(y_true, y_pred_proba, threshold=0.5):
-    """Approximate Sharpe: (mean win - mean loss) / std."""
-    preds = (y_pred_proba >= threshold).astype(int)
-    pnl = preds * (2 * y_true - 1)  # +1 for correct long, -1 for wrong
-    if pnl.std() == 0:
-        return 0
-    return pnl.mean() / pnl.std()
+# === Utility =================================================================
+
+def pseudo_pnl(y_true, y_pred, reward=1.0, penalty=-0.5):
+    pnl = np.where(y_pred == 1, np.where(y_true == 1, reward, penalty), 0)
+    return pnl.sum(), pnl.mean(), pnl.std(), pnl
 
 
-# --- main --------------------------------------------------------------------
+def evaluate_thresholds(y_true, proba, thresholds):
+    records = []
+    for thr in thresholds:
+        preds = (proba >= thr).astype(int)
+        pnl_sum, pnl_mean, pnl_std, _ = pseudo_pnl(y_true, preds)
+        trades = preds.sum()
+        sharpe = 0 if pnl_std == 0 else pnl_mean / pnl_std
+        records.append({
+            "threshold": thr,
+            "trades": int(trades),
+            "mean_pnl": round(pnl_mean, 4),
+            "total_pnl": round(pnl_sum, 2),
+            "sharpe_like": round(sharpe, 3)
+        })
+    return pd.DataFrame(records)
+
+
+# === Main ====================================================================
+
 def main():
-    print("🚀 Training ML models on btc_osc_pa_v1 dataset")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dataset", type=str, required=True,
+                        help="Dataset filename (without path). Example: tom_makin_1m_osc_4h_pa_v1")
+    args = parser.parse_args()
+    dataset_name = args.dataset.replace(".parquet", "")
+    data_path = Path(f"data/datasets/{dataset_name}.parquet")
 
-    data_path = Path("data/datasets/btc_osc_pa_v1.parquet")
+    print(f"🚀 Training conviction-based ML models on {dataset_name}")
     df = pd.read_parquet(data_path)
-    print(f"📂 Loaded dataset: {len(df):,} rows, positives: {df['y'].sum()}")
+    print(f"📂 Loaded dataset: {len(df):,} rows | positives: {df['y'].sum()}")
 
-    # === features ===
+    # --- features -------------------------------------------------------------
     feature_cols = [
-        "body", "upper_wick", "lower_wick", "true_range_norm", "atr_norm",
-        "kd_spread", "k_below_thr", "d_below_thr", "weekly_bullish_int",
+        "body", "upper_wick", "lower_wick", "true_range_norm",
+        "kd_spread", "k_below_thr", "d_below_thr", "bullish_int",
         "dow", "hour_bin"
     ]
-    X = df[feature_cols].copy()
+    X = df[feature_cols].copy().fillna(0)
     y = df["y"].astype(int).values
-    sample_weight = df["weight"].values
+    sample_weight = df.get("weight", pd.Series(1, index=df.index)).values
 
-    # === scaling ===
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
 
-    # === Time-based CV ===
+    # --- CV -------------------------------------------------------------------
     n_splits = 5
     tscv = TimeSeriesSplit(n_splits=n_splits)
-    results = []
+    print(f"🧪 Performing {n_splits}-fold walk-forward CV...")
 
-    print(f"🧪 Running {n_splits}-fold walk-forward validation...")
+    fold_metrics = []
+    all_val_probs, all_val_true = [], []
+
     for fold, (train_idx, val_idx) in enumerate(tscv.split(X_scaled), start=1):
         X_train, X_val = X_scaled[train_idx], X_scaled[val_idx]
         y_train, y_val = y[train_idx], y[val_idx]
         w_train = sample_weight[train_idx]
 
-        # Handle imbalance
-        classes = np.unique(y_train)
-        class_weights = compute_class_weight('balanced', classes=classes, y=y_train)
-        cw_dict = dict(zip(classes, class_weights))
+        # Skip if only one class in training data
+        if len(np.unique(y_train)) < 2:
+            print(f"⚠️  Skipping fold {fold}: only one class present in training data.")
+            continue
 
-        # --- Logistic Regression ---
+        # Compute balanced class weights
+        classes = np.unique(y_train)
+        cw_values = compute_class_weight(class_weight="balanced", classes=classes, y=y_train)
+        cw = dict(zip(classes, cw_values))
+
+        # Train calibrated logistic regression
         logreg = LogisticRegression(
-            penalty="l2",
-            C=1.0,
-            solver="liblinear",
-            class_weight=cw_dict,
-            max_iter=200
+            penalty="l2", C=1.0, solver="liblinear",
+            class_weight=cw, max_iter=300
         )
         logreg.fit(X_train, y_train, sample_weight=w_train)
-
         cal = CalibratedClassifierCV(logreg, cv='prefit', method='isotonic')
         cal.fit(X_val, y_val)
 
         y_pred_proba = cal.predict_proba(X_val)[:, 1]
-        prec = precision_score(y_val, y_pred_proba >= 0.5)
-        rec = recall_score(y_val, y_pred_proba >= 0.5)
         auc = roc_auc_score(y_val, y_pred_proba)
-        sharpe = sharpe_like(y_val, y_pred_proba, 0.5)
+        all_val_probs.extend(y_pred_proba)
+        all_val_true.extend(y_val)
+        fold_metrics.append({"fold": fold, "auc": auc})
+        print(f"Fold {fold}: AUC={auc:.3f}")
 
-        results.append({
-            "fold": fold,
-            "precision": prec,
-            "recall": rec,
-            "auc": auc,
-            "sharpe": sharpe
-        })
-        print(f"Fold {fold}: prec={prec:.3f}, rec={rec:.3f}, auc={auc:.3f}, sharpe={sharpe:.3f}")
+    if not fold_metrics:
+        raise RuntimeError("No valid folds contained both classes. Try fewer splits or resampling.")
 
-    res_df = pd.DataFrame(results)
     print("\n📊 CV Summary:")
+    res_df = pd.DataFrame(fold_metrics)
     print(res_df.mean().round(3))
 
-    # === Train final models on full data ===
+    # --- Train final models ---------------------------------------------------
     print("\n🏗️ Training final Logistic Regression + XGBoost models...")
-
-    # Logistic Regression (calibrated)
     logreg_final = LogisticRegression(
-        penalty="l2",
-        C=1.0,
-        solver="liblinear",
-        class_weight="balanced",
-        max_iter=200
+        penalty="l2", C=1.0, solver="liblinear",
+        class_weight="balanced", max_iter=300
     ).fit(X_scaled, y, sample_weight=sample_weight)
     cal_final = CalibratedClassifierCV(logreg_final, cv=3, method="isotonic")
     cal_final.fit(X_scaled, y)
 
-    # XGBoost
     xgb = XGBClassifier(
-        n_estimators=400,
-        max_depth=4,
-        learning_rate=0.03,
-        subsample=0.8,
-        colsample_bytree=0.8,
-        scale_pos_weight=(len(y) - y.sum()) / y.sum(),
-        eval_metric="logloss",
-        n_jobs=-1,
-        random_state=42
+        n_estimators=400, max_depth=4, learning_rate=0.03,
+        subsample=0.8, colsample_bytree=0.8,
+        scale_pos_weight=(len(y) - y.sum()) / (y.sum() + 1e-9),
+        eval_metric="logloss", n_jobs=-1, random_state=42
     )
     xgb.fit(X, y, sample_weight=sample_weight, verbose=False)
 
-    # === Save models ===
-    out_dir = Path("models")
-    out_dir.mkdir(parents=True, exist_ok=True)
+    # --- Evaluate conviction curve -------------------------------------------
+    all_val_probs = np.array(all_val_probs)
+    all_val_true = np.array(all_val_true)
+    thresholds = np.linspace(0.05, 0.95, 19)
+    curve = evaluate_thresholds(all_val_true, all_val_probs, thresholds)
 
+    out_dir = Path("data/results")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    curve_path = out_dir / f"{dataset_name}_conviction_curve.csv"
+    curve.to_csv(curve_path, index=False)
+    print(f"💾 Conviction curve saved → {curve_path}")
+
+    # --- Plot ----------------------------------------------------------------
+    plt.figure(figsize=(8,5))
+    plt.plot(curve["threshold"], curve["mean_pnl"], marker="o", label="Mean PnL")
+    plt.plot(curve["threshold"], curve["sharpe_like"], marker="x", label="Sharpe-like")
+    plt.xlabel("Probability Threshold")
+    plt.title("Conviction vs Profitability")
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.savefig(out_dir / f"{dataset_name}_conviction_curve.png", dpi=150)
+    plt.close()
+    print(f"📈 Plot saved → {dataset_name}_conviction_curve.png")
+
+    # --- Save models ---------------------------------------------------------
+    model_dir = Path("models")
+    model_dir.mkdir(parents=True, exist_ok=True)
+    model_file = model_dir / f"{dataset_name}.pkl"
     joblib.dump({
         "scaler": scaler,
         "logreg_cal": cal_final,
         "xgb": xgb,
         "features": feature_cols
-    }, out_dir / "btc_osc_pa_v1.pkl")
+    }, model_file)
+    print(f"💾 Saved models → {model_file}")
 
     meta = {
-        "n_rows": int(len(df)),
+        "dataset": dataset_name,
+        "n_rows": len(df),
         "n_pos": int(df["y"].sum()),
-        "features": feature_cols,
-        "cv_results": res_df.to_dict(orient="records")
+        "cv_auc_mean": float(res_df["auc"].mean()),
+        "conviction_curve": str(curve_path)
     }
-    with open(out_dir / "btc_osc_pa_v1_meta.json", "w") as f:
+    with open(model_dir / f"{dataset_name}_meta.json", "w") as f:
         json.dump(meta, f, indent=2)
 
-    print(f"💾 Saved models to {out_dir.resolve()}")
-    print(f"🏁 Mean CV Sharpe: {res_df['sharpe'].mean():.3f}")
+    print(f"🏁 Mean CV AUC: {meta['cv_auc_mean']:.3f}")
+    print("✅ Conviction-based training complete.")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,18 @@
+{
+  "rows":60,
+  "files":[
+    "btc_osc_pa_sweep_20251101_180811.csv"
+  ],
+  "best_models":{
+    "sharpe":{
+      "name":"xgb",
+      "r2":0.8659637907,
+      "mae":0.0155148641
+    },
+    "profit_factor":{
+      "name":"xgb",
+      "r2":0.7028865322,
+      "mae":0.4186291116
+    }
+  }
+}
